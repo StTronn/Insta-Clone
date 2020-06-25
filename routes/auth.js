@@ -1,8 +1,41 @@
 import { Router } from "express";
+import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import { BadRequestError } from "../utils/error";
 const router = Router();
 
 const saltRounds = 10;
+
+router.post("/login", async (req, res, next) => {
+  let models = req.context.models;
+  let resObj = {};
+  try {
+    //validate user
+    let { email, password } = req.body;
+    const user = await models.User.findOne({ where: { email } });
+    if (!user) {
+      const error = new Error(`username and password dosen't match`);
+      error.statusCode = 401;
+      throw error;
+    }
+    const valid = await bcrypt.compare(password, user.password);
+    if (!valid) {
+      const error = new Error(`username and password dosen't match`);
+      error.statusCode = 401;
+      throw error;
+    }
+    //sent token and message
+    const token = await createToken(user, process.env.JWT_KEY);
+    resObj = {
+      message: `${user.username} you have succesfully logged in`,
+      token,
+    };
+    return res.send(resObj);
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+});
 
 router.post("/register", async (req, res) => {
   let models = req.context.models;
@@ -16,24 +49,20 @@ router.post("/register", async (req, res) => {
         where: { username },
       });
       if (userWithUsername) {
-        resObj = {
-          user: {},
-          response: "ERROR",
-          message: "username is taken",
-          error: "",
-        };
+        const error = new Error(`${username} already exists try another`);
+        error.statusCode = 409;
+        throw error;
       }
       let userWithEmail = await models.User.findOne({
         where: { email },
       });
       //check for email
       if (!userWithUsername && userWithEmail) {
-        resObj = {
-          user: {},
-          response: "ERROR",
-          message: "a account with email already exists",
-          error: "",
-        };
+        const error = new Error(
+          `there is already an account with the following email try logging in`
+        );
+        error.statusCode = 409;
+        throw error;
       }
       //register
       if (!userWithUsername && !userWithEmail) {
@@ -46,24 +75,21 @@ router.post("/register", async (req, res) => {
         resObj = { user, response: "OK", message: "user created", error: "" };
       }
     } else {
-      resObj = {
-        user: {},
-        response: "ERROR",
-        message: "not enough details",
-        error: "not enough details",
-      };
+      next(new BadRequestError());
     }
     res.send(resObj);
   } catch (err) {
     console.log(err);
-    resObj = {
-      user: {},
-      response: "ERROR",
-      message: "",
-      error: "cannot create user in database",
-    };
-    res.send(resObj);
+    next(err);
   }
 });
+
+const createToken = async (user, secret) => {
+  const token = jwt.sign({ id: user.id }, secret);
+  console.log(token);
+  return token;
+};
+
+export { createToken };
 
 export default router;
