@@ -3,7 +3,7 @@ import protect from "../middleware/auth";
 
 const router = Router();
 
-//create post
+//create post,comment +
 //get post of all user
 //get all post sorted by date created
 router.post("/", protect, async (req, res, next) => {
@@ -25,6 +25,38 @@ router.post("/", protect, async (req, res, next) => {
   }
 });
 
+//get all post by user
+router.get("/", protect, async (req, res, next) => {
+  try {
+    const models = req.context.models;
+    const user = req.context.user;
+    const posts = await models.Post.findAll({ where: { userId: user.id } });
+    res.send({ posts });
+  } catch (err) {
+    next(err);
+  }
+});
+
+//delete post of user
+router.get("/delete/:postId", protect, async (req, res, next) => {
+  try {
+    const postId = parseInt(req.params.postId);
+    const models = req.context.models;
+    const user = req.context.user;
+    const post = await models.Post.findOne({
+      where: { userId: user.id, id: postId },
+    });
+    if (!post)
+      throw new Error(
+        "cannot find the post to delete or the user dosen't have the permission"
+      );
+    await post.destroy();
+    res.send({ message: "post deleted succesfully" });
+  } catch (err) {
+    next(err);
+  }
+});
+
 //note outside the server the message is refered to as a comment
 router.post("/comment", protect, async (req, res, next) => {
   try {
@@ -36,7 +68,22 @@ router.post("/comment", protect, async (req, res, next) => {
       postId,
       userId: user.id,
     });
-    res.send({ comment, message: "comment added" });
+    res.send({ comment: message, message: "comment added" });
+  } catch (err) {
+    next(err);
+  }
+});
+
+//permalink of post
+router.get("/:postId", protect, async (req, res, next) => {
+  try {
+    const postId = parseInt(req.params.postId);
+    const models = req.context.models;
+    const post = await models.Post.findOne({
+      where: { id: postId },
+    });
+    if (!post) throw new Error("cannot find the post ");
+    res.send({ post });
   } catch (err) {
     next(err);
   }
