@@ -6,6 +6,7 @@ const router = Router();
 //create post,comment +
 //get post of all user
 //get all post sorted by date created
+
 router.post("/", protect, async (req, res, next) => {
   try {
     const models = req.context.models;
@@ -33,6 +34,17 @@ router.get("/", protect, async (req, res, next) => {
     const posts = await models.Post.findAll({ where: { userId: user.id } });
     res.send({ posts });
   } catch (err) {
+    next(err);
+  }
+});
+
+router.get("/all", async (req, res, next) => {
+  try {
+    const models = req.context.models;
+    const posts = await models.Post.findAll({ order: [["createdAt", "DESC"]] });
+    res.send({ posts });
+  } catch (err) {
+    console.log(err);
     next(err);
   }
 });
