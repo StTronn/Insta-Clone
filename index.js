@@ -3,11 +3,12 @@ const app = express();
 const port = 3000;
 import models, { sequelize } from "./models";
 import auth from "./routes/auth";
+import post from "./routes/post";
 import protect from "./middleware/auth";
 import dotenv from "dotenv";
 const bodyParser = require("body-parser");
 
-const eraseDatabaseOnSync = true;
+const eraseDatabaseOnSync = false;
 dotenv.config();
 
 //middlewares
@@ -23,16 +24,16 @@ app.use((req, res, next) => {
 
 //routers
 app.use("/auth", auth);
+app.use("/post", post);
 
 app.get("/", (req, res) => res.send("Hello World!"));
 
 app.get("/me", protect, async (req, res) => {
   let models = req.context.models;
-  let userId = req.context.userId;
+  let user = req.context.user;
 
-  const user = await models.User.findOne({ where: { id: userId } });
   console.log(user);
-  res.send("hello");
+  res.send({ user });
 });
 
 app.get("*", function (req, res, next) {

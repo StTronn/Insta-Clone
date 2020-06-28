@@ -1,6 +1,7 @@
 import { Router } from "express";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import protect from "../middleware/auth";
 import { BadRequestError } from "../utils/error";
 const router = Router();
 
@@ -26,6 +27,8 @@ router.post("/login", async (req, res, next) => {
     }
     //sent token and message
     const token = await createToken(user, process.env.JWT_KEY);
+    user.token = token;
+    await user.save();
     resObj = {
       message: `${user.username} you have succesfully logged in`,
       token,
@@ -33,6 +36,18 @@ router.post("/login", async (req, res, next) => {
     return res.send(resObj);
   } catch (err) {
     console.log(err);
+    next(err);
+  }
+});
+
+router.post("logout", protect, async (req, res) => {
+  try {
+    let user = req.context.user.token;
+    user.token = "";
+    await user.save();
+    res.send({ message: "succesfully logout" });
+  } catch (err) {
+    err.statusCode = 401;
     next(err);
   }
 });

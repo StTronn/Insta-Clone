@@ -10,10 +10,15 @@ const message = (sequelize, DataTypes) => {
   });
 
   Message.associate = (models) => {
-    Message.belongsTo(models.User, {
+    Message.belongsTo(models.Post, {
       foreignKey: {
         allowNull: false,
-        foreignKey: "userId",
+        foreignKey: "parentId",
+      },
+    });
+    Message.belongsTo(models.User, {
+      foreignKey: {
+        foreignKey: "UserId",
       },
     });
   };

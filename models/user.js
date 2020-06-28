@@ -15,6 +15,7 @@ const user = (sequelize, DataTypes) => {
         },
       },
     },
+
     email: {
       type: DataTypes.STRING,
       unique: true,
@@ -25,6 +26,7 @@ const user = (sequelize, DataTypes) => {
         },
       },
     },
+
     password: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -32,9 +34,14 @@ const user = (sequelize, DataTypes) => {
         notEmpty: true,
       },
     },
+
+    token: {
+      type: DataTypes.STRING,
+    },
   });
 
   User.associate = (models) => {
+    User.hasMany(models.Post, { onDelete: "CASCADE" });
     User.hasMany(models.Message, { onDelete: "CASCADE" });
   };
 
