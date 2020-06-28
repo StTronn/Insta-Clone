@@ -37,6 +37,24 @@ router.get("/", protect, async (req, res, next) => {
   }
 });
 
+//edit post
+router.get("/updatePost", protect, async (req, res, next) => {
+  try {
+    const models = req.context.models;
+    let { title, content, postId } = req.body;
+    if (!title) throw new Error("cannot update post with empty title");
+    content = content || "";
+
+    const post = await models.Post.findOne({ where: { id: postId } });
+    post.title = title;
+    post.content = content;
+    post.save();
+    res.send({ post, message: "post updated" });
+  } catch (err) {
+    next(err);
+  }
+});
+
 //delete post of user
 router.get("/delete/:postId", protect, async (req, res, next) => {
   try {
