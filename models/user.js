@@ -44,7 +44,7 @@ const user = (sequelize, DataTypes) => {
     User.hasMany(models.Post, { onDelete: "CASCADE" });
     User.hasMany(models.Message, { onDelete: "CASCADE" });
     User.belongsToMany(models.Post, {
-      through: "votes",
+      through: models.Vote,
       foreignKey: {
         name: "userId",
       },

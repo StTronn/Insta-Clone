@@ -87,7 +87,32 @@ router.get("/delete/:postId", protect, async (req, res, next) => {
   }
 });
 
+router.get("/vote/:postId", protect, async (req, res, next) => {
+  try {
+    const postId = parseInt(req.params.postId);
+    const models = req.context.models;
+    const user = req.context.user;
+    const post = await models.Post.findOne({
+      where: { id: postId },
+    });
+    if (!post) throw new Error("cannot find the post to ");
+    const vote = await models.Vote.findOne({
+      where: { userId: user.id, postId },
+    });
+    //check for vote if not found
+    if (!vote) await models.Vote.create({ userId: user.id, postId });
+    else await vote.destroy();
+    //else delete
+    res.send({ message: "voted" });
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+});
+
 //note outside the server the message is refered to as a comment
+//comment to a given post
+//todo add post in path
 router.post("/comment", protect, async (req, res, next) => {
   try {
     const models = req.context.models;

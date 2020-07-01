@@ -25,7 +25,7 @@ const post = (sequelize, DataTypes) => {
       },
     });
     Post.belongsToMany(models.User, {
-      through: "votes",
+      through: models.Vote,
       foreignKey: {
         name: "postId",
       },

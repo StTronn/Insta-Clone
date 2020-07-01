@@ -8,6 +8,8 @@ const models = {
   User: sequelize.import("./user"),
   Message: sequelize.import("./message"),
   Post: sequelize.import("./post"),
+  Vote: sequelize.import("./vote"),
+  sequelize,
 };
 
 Object.keys(models).forEach((key) => {

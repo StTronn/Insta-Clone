@@ -52,10 +52,10 @@ router.post("logout", protect, async (req, res) => {
   }
 });
 
-router.post("/register", async (req, res) => {
-  let models = req.context.models;
-  let resObj = {};
+router.post("/register", async (req, res, next) => {
   try {
+    let models = req.context.models;
+    let resObj = {};
     let { username, email, password } = req.body;
 
     if (username && email && password) {
