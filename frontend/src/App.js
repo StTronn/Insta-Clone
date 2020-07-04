@@ -3,6 +3,8 @@ import { Store } from "./store";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 import Login from "./components/Login";
+import Register from "./components/Register";
+import Home from "./components/Home";
 import "./App.css";
 
 function App() {
@@ -18,10 +20,10 @@ function App() {
                 <Link to="/">Home</Link>
               </li>
               <li>
-                <Link to="/about">About</Link>
+                <Link to="/login">login</Link>
               </li>
               <li>
-                <Link to="/users">Users</Link>
+                <Link to="/register">Sign Up</Link>
               </li>
             </ul>
           </nav>
@@ -33,16 +35,14 @@ function App() {
               <Login />
             </Route>
             <Route path="/register">
-              <Login />
+              <Register />
             </Route>
-            <Route path="/">
-              <Login />
+            <Route exact path="/">
+              <Home />
             </Route>
           </Switch>
         </div>
       </Router>
-      <h1> rick and morty</h1>
-      <Login />
     </div>
   );
 }

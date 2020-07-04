@@ -7,6 +7,7 @@ const Login = () => {
   const [email, setemail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  //make the login req
   const fetchLoginResult = async (event) => {
     event.preventDefault();
     try {
