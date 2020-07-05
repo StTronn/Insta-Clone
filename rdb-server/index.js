@@ -1,6 +1,7 @@
 import express from "express";
 const app = express();
-const port = 3000;
+const port = 8000;
+import cors from "cors";
 import models, { sequelize } from "./models";
 import auth from "./routes/auth";
 import post from "./routes/post";
@@ -12,6 +13,7 @@ const eraseDatabaseOnSync = false;
 dotenv.config();
 
 //middlewares
+app.use(cors());
 app.use(bodyParser.json());
 
 app.use((req, res, next) => {

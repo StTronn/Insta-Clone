@@ -16,13 +16,13 @@ router.post("/login", async (req, res, next) => {
     const user = await models.User.findOne({ where: { email } });
     if (!user) {
       const error = new Error(`username and password dosen't match`);
-      error.statusCode = 401;
+      error.statusCode = 403;
       throw error;
     }
     const valid = await bcrypt.compare(password, user.password);
     if (!valid) {
       const error = new Error(`username and password dosen't match`);
-      error.statusCode = 401;
+      error.statusCode = 403;
       throw error;
     }
     //sent token and message

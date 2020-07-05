@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { Store } from "../store";
 import { URL } from "../utils";
 
-const fetchAllPost = async (setLoading, setPosts) => {
+const fetchAllPost = async (setLoading, dispatch) => {
   try {
     setLoading(true);
     const response = await fetch(URL + "/post/all", {
@@ -12,18 +13,24 @@ const fetchAllPost = async (setLoading, setPosts) => {
     });
     const data = await response.json();
     setLoading(false);
-    console.log(data.posts);
-    setPosts({ posts: data.posts, error: false });
+    console.log("fetching", data.posts);
+    dispatch({
+      type: "GET_POSTS",
+      payload: { posts: data.posts, error: false },
+    });
   } catch (err) {
+    dispatch({ action: "GET_POSTS", payload: { posts: [], error: true } });
     setLoading(false);
   }
 };
 const Home = () => {
+  const { state, dispatch } = useContext(Store);
+  const { posts, error } = state.allPostsObj;
   const [loading, setLoading] = useState(false);
-  const [{ posts, error }, setPosts] = useState({ posts: [], error: true });
+  console.log(state);
   useEffect(() => {
-    fetchAllPost(setLoading, setPosts);
-  }, []);
+    fetchAllPost(setLoading, dispatch);
+  }, [dispatch]);
 
   if (loading) return <div>Loading ...</div>;
   if (error) return <div>something went wrong </div>;
