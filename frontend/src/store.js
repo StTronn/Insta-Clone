@@ -4,6 +4,7 @@ export const Store = React.createContext();
 
 const initialState = {
   counter: 0,
+  token: false,
   allPostsObj: { posts: [], error: false },
 };
 

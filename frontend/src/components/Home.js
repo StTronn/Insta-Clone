@@ -13,7 +13,6 @@ const fetchAllPost = async (setLoading, dispatch) => {
     });
     const data = await response.json();
     setLoading(false);
-    console.log("fetching", data.posts);
     dispatch({
       type: "GET_POSTS",
       payload: { posts: data.posts, error: false },
@@ -27,7 +26,6 @@ const Home = () => {
   const { state, dispatch } = useContext(Store);
   const { posts, error } = state.allPostsObj;
   const [loading, setLoading] = useState(false);
-  console.log(state);
   useEffect(() => {
     fetchAllPost(setLoading, dispatch);
   }, [dispatch]);

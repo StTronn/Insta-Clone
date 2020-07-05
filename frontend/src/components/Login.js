@@ -1,9 +1,11 @@
 import React, { useContext, useState } from "react";
+import { Redirect } from "react-router-dom";
 import { Store } from "../store";
 import { URL } from "../utils";
 
-const Login = () => {
-  const { dispatch } = useContext(Store);
+const Login = (props) => {
+  const { from } = props.location.state || { from: { pathname: "/" } };
+  const { state, dispatch } = useContext(Store);
   const [email, setemail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -28,52 +30,52 @@ const Login = () => {
       }
       const data = await response.json();
       dispatch({ type: "SET_TOKEN", payload: data.token });
-    } catch (err) {
-      console.log(err.statusCode);
-    }
+    } catch (err) {}
   };
-  return (
-    <>
-      <form
-        onSubmit={(e) => {
-          fetchLoginResult(e);
-        }}
-      >
-        <label>
-          email:
-          <input
-            type="text"
-            value={email}
-            onChange={(e) => {
-              setemail(e.target.value);
-            }}
-            name="name"
-          />
-        </label>
-        <br />
+  if (!state.token)
+    return (
+      <>
+        <form
+          onSubmit={(e) => {
+            fetchLoginResult(e);
+          }}
+        >
+          <label>
+            email:
+            <input
+              type="text"
+              value={email}
+              onChange={(e) => {
+                setemail(e.target.value);
+              }}
+              name="name"
+            />
+          </label>
+          <br />
 
-        <label>
-          password:
+          <label>
+            password:
+            <input
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
+              type="password"
+              name="name"
+            />
+          </label>
+          <br />
+          <p style={{ color: "red" }}>{errorMessage}</p>
+          <br />
           <input
-            value={password}
-            onChange={(e) => {
-              setPassword(e.target.value);
-            }}
-            type="password"
-            name="name"
+            disabled={email === "" || password === ""}
+            type="submit"
+            value="Submit"
           />
-        </label>
-        <br />
-        <p style={{ color: "red" }}>{errorMessage}</p>
-        <br />
-        <input
-          disabled={email === "" || password === ""}
-          type="submit"
-          value="Submit"
-        />
-      </form>
-    </>
-  );
+        </form>
+      </>
+    );
+  else return <Redirect to={from} />;
 };
 
 export default Login;
