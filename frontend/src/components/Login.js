@@ -9,6 +9,7 @@ const Login = (props) => {
   const [email, setemail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+
   //make the login req
   const fetchLoginResult = async (event) => {
     event.preventDefault();
@@ -29,10 +30,15 @@ const Login = (props) => {
         return;
       }
       const data = await response.json();
-      dispatch({ type: "SET_TOKEN", payload: data.token });
+      console.log(data);
+      dispatch({ type: "SET_USER", payload: data.user });
     } catch (err) {}
   };
-  if (!state.token)
+
+  from.pathname = from.pathname.startsWith("/user")
+    ? `/user/${state.user.username}`
+    : from.pathname;
+  if (state.user === false)
     return (
       <>
         <form

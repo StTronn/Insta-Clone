@@ -5,7 +5,7 @@ import { Store } from "../store";
 const PrivateRoute = ({ component: Component, ...rest }) => {
   // Add your own authentication on the below line.
   const { state } = useContext(Store);
-  const isLoggedIn = state.token;
+  const isLoggedIn = state.user;
   return (
     <Route
       {...rest}

@@ -4,7 +4,7 @@ export const Store = React.createContext();
 
 const initialState = {
   counter: 0,
-  token: false,
+  user: false,
   allPostsObj: { posts: [], error: false },
 };
 
@@ -13,8 +13,8 @@ function reducer(state, action) {
   switch (action.type) {
     case "INC_COUNTER":
       return { ...state, counter: state.counter + 1 };
-    case "SET_TOKEN":
-      return { ...state, token: action.payload };
+    case "SET_USER":
+      return { ...state, user: action.payload };
     case "GET_POSTS":
       return { ...state, allPostsObj: action.payload };
     default:
