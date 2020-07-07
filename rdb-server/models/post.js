@@ -17,7 +17,7 @@ const post = (sequelize, DataTypes) => {
   });
 
   Post.associate = (models) => {
-    Post.hasMany(models.Message, { onDelete: "CASCADE" });
+    Post.hasMany(models.Comment, { onDelete: "CASCADE" });
     Post.belongsTo(models.User, {
       foreignKey: {
         allowNull: false,
@@ -25,7 +25,7 @@ const post = (sequelize, DataTypes) => {
       },
     });
     Post.belongsToMany(models.User, {
-      through: models.Vote,
+      through: models.Like,
       foreignKey: {
         name: "postId",
       },

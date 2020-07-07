@@ -15,6 +15,10 @@ const user = (sequelize, DataTypes) => {
         },
       },
     },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
 
     email: {
       type: DataTypes.STRING,
@@ -34,7 +38,9 @@ const user = (sequelize, DataTypes) => {
         notEmpty: true,
       },
     },
-
+    bio: {
+      type: DataTypes.STRING,
+    },
     token: {
       type: DataTypes.STRING,
     },
@@ -42,9 +48,9 @@ const user = (sequelize, DataTypes) => {
 
   User.associate = (models) => {
     User.hasMany(models.Post, { onDelete: "CASCADE" });
-    User.hasMany(models.Message, { onDelete: "CASCADE" });
+    User.hasMany(models.Comment, { onDelete: "CASCADE" });
     User.belongsToMany(models.Post, {
-      through: models.Vote,
+      through: models.Like,
       foreignKey: {
         name: "userId",
       },

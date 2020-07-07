@@ -7,9 +7,10 @@ import auth from "./routes/auth";
 import post from "./routes/post";
 import protect from "./middleware/auth";
 import dotenv from "dotenv";
+import insertFakedata from "./faker";
 const bodyParser = require("body-parser");
 
-const eraseDatabaseOnSync = false;
+const eraseDatabaseOnSync = true;
 dotenv.config();
 
 //middlewares
@@ -56,4 +57,5 @@ app.use((error, req, res, next) => {
 
 sequelize.sync({ force: eraseDatabaseOnSync }).then(async () => {
   app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+  insertFakedata();
 });

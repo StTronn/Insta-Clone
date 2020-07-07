@@ -1,5 +1,5 @@
-const message = (sequelize, DataTypes) => {
-  const Message = sequelize.define("message", {
+const comment = (sequelize, DataTypes) => {
+  const Comment = sequelize.define("comment", {
     text: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -9,21 +9,21 @@ const message = (sequelize, DataTypes) => {
     },
   });
 
-  Message.associate = (models) => {
-    Message.belongsTo(models.Post, {
+  Comment.associate = (models) => {
+    Comment.belongsTo(models.Post, {
       foreignKey: {
         allowNull: false,
         foreignKey: "parentId",
       },
     });
-    Message.belongsTo(models.User, {
+    Comment.belongsTo(models.User, {
       foreignKey: {
         foreignKey: "UserId",
       },
     });
   };
 
-  return Message;
+  return Comment;
 };
 
-export default message;
+export default comment;

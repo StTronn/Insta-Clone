@@ -118,12 +118,12 @@ router.post("/comment", protect, async (req, res, next) => {
     const models = req.context.models;
     let { text, postId } = req.body;
     const user = req.context.user;
-    const message = await models.Message.create({
+    const comment = await models.Comment.create({
       text,
       postId,
       userId: user.id,
     });
-    res.send({ comment: message, message: "comment added" });
+    res.send({ comment, message: "comment added" });
   } catch (err) {
     next(err);
   }

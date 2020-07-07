@@ -6,9 +6,9 @@ const sequelize = new Sequelize("test1", "postgres", "rishav2000", {
 
 const models = {
   User: sequelize.import("./user"),
-  Message: sequelize.import("./message"),
+  Comment: sequelize.import("./comment"),
   Post: sequelize.import("./post"),
-  Vote: sequelize.import("./vote"),
+  Like: sequelize.import("./like"),
   sequelize,
 };
 
