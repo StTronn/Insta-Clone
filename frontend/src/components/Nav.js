@@ -48,7 +48,6 @@ const NavWrapper = styled.div`
 const Nav = () => {
   const { state } = useContext(Store);
   const { user } = state;
-  console.log(user);
   return (
     <NavWrapper>
       <nav>

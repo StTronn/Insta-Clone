@@ -13,7 +13,10 @@ router.post("/login", async (req, res, next) => {
   try {
     //validate user
     let { email, password } = req.body;
-    const user = await models.User.findOne({ where: { email } });
+    const user = await models.User.findOne({
+      where: { email },
+      include: { model: models.Post, as: "posts" },
+    });
     if (!user) {
       const error = new Error(`username and password dosen't match`);
       error.statusCode = 403;
@@ -31,7 +34,7 @@ router.post("/login", async (req, res, next) => {
     await user.save();
     resObj = {
       message: `${user.username} you have succesfully logged in`,
-      token,
+      user,
     };
     return res.send(resObj);
   } catch (err) {
