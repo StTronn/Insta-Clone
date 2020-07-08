@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
+import Follow from "./Follow";
 
 const MobileWrapper = styled.div`
   margin: 1rem 0;
@@ -133,7 +134,8 @@ const ModalContentWrapper = styled.div`
 
 // `
 
-const ProfileHeader = () => {
+const ProfileHeader = ({ user }) => {
+  console.log(user);
   return (
     <Wrapper>
       <img
@@ -145,12 +147,23 @@ const ProfileHeader = () => {
       />
       <div className="profile-info">
         <div className="profile-meta">
-          <h2>User</h2>
+          <h2>{user.username}</h2>
+          <Follow />
         </div>
 
-        <div className="profile-stats"></div>
+        <div className="profile-stats">
+          <span>{user.postCount} posts</span>
 
-        <div className="bio"></div>
+          <span className="pointer">{user.followersCount} followers</span>
+
+          <span className="pointer">{user.followingCount} following</span>
+        </div>
+        <div className="bio">
+          <p className="bold" style={{ textAlign: "left" }}>
+            {user.name.toUpperCase()}
+          </p>
+          <p style={{ textAlign: "left" }}>{user.bio}</p>
+        </div>
       </div>
     </Wrapper>
   );

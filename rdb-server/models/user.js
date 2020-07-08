@@ -15,6 +15,18 @@ const user = (sequelize, DataTypes) => {
         },
       },
     },
+    postCount: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+    },
+    followersCount: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+    },
+    followingCount: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+    },
     name: {
       type: DataTypes.STRING,
       allowNull: false,

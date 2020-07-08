@@ -87,7 +87,7 @@ router.get("/delete/:postId", protect, async (req, res, next) => {
   }
 });
 
-router.get("/vote/:postId", protect, async (req, res, next) => {
+router.get("/like/:postId", protect, async (req, res, next) => {
   try {
     const postId = parseInt(req.params.postId);
     const models = req.context.models;
@@ -96,14 +96,14 @@ router.get("/vote/:postId", protect, async (req, res, next) => {
       where: { id: postId },
     });
     if (!post) throw new Error("cannot find the post to ");
-    const vote = await models.Vote.findOne({
+    const like = await models.Like.findOne({
       where: { userId: user.id, postId },
     });
-    //check for vote if not found
-    if (!vote) await models.Vote.create({ userId: user.id, postId });
-    else await vote.destroy();
+    //check for like if not found
+    if (!like) await models.Like.create({ userId: user.id, postId });
+    else await like.destroy();
     //else delete
-    res.send({ message: "voted" });
+    res.send({ message: "like" });
   } catch (err) {
     console.log(err);
     next(err);

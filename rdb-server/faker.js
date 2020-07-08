@@ -17,10 +17,36 @@ const insertFakedata = async () => {
     email: "follows@gmail.com",
     password,
   });
+
   await models.Post.create({
     title: "jhon wick style",
     content: "killed 2 men in a bar with a frkin pencil",
     userId: 1,
+  });
+  await models.Post.create({
+    title: "last of us II",
+    content: "seriously what's with the hype",
+    userId: 1,
+  });
+
+  await models.Follow.create({
+    userId: 1,
+    followerId: 2,
+  });
+
+  await models.Like.create({
+    userId: 1,
+    postId: 1,
+  });
+  await models.Like.create({
+    userId: 2,
+    postId: 1,
+  });
+
+  await models.Comment.create({
+    text: "true af",
+    postId: 1,
+    userId: 2,
   });
 };
 

@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { URL } from "../utils";
 import ProfileHeader from "./ProfileHeader";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
@@ -29,15 +30,37 @@ const Wrapper = styled.div`
   }
 `;
 
+const getUser = async (username, setUser) => {
+  try {
+    const response = await fetch(URL + "/user/" + username);
+    const user = await response.json();
+    user.error = false;
+    setUser(user);
+  } catch (err) {
+    console.log(err);
+    setUser({ error: true });
+  }
+};
+
 const Profile = () => {
   const { username } = useParams();
-
-  return (
-    <Wrapper>
-      <ProfileHeader />
-      <hr />
-    </Wrapper>
-  );
+  const [user, setUser] = useState(false);
+  useEffect(() => {
+    getUser(username, setUser);
+  }, [username]);
+  if (user)
+    return (
+      <Wrapper>
+        <ProfileHeader user={user} />
+        <hr />
+      </Wrapper>
+    );
+  else
+    return (
+      <Wrapper>
+        <h1> Loading</h1>
+      </Wrapper>
+    );
 };
 
 export default Profile;

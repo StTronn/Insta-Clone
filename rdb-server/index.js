@@ -4,6 +4,7 @@ const port = 8000;
 import cors from "cors";
 import models, { sequelize } from "./models";
 import auth from "./routes/auth";
+import user from "./routes/user";
 import post from "./routes/post";
 import protect from "./middleware/auth";
 import dotenv from "dotenv";
@@ -28,6 +29,7 @@ app.use((req, res, next) => {
 //routers
 app.use("/auth", auth);
 app.use("/post", post);
+app.use("/user", user);
 
 app.get("/", (req, res) => res.send("Hello World!"));
 

@@ -19,6 +19,23 @@ Object.keys(models).forEach((key) => {
   }
 });
 
+//hooks
+models.Follow.beforeCreate(async (follow, options) => {
+  const user = await models.User.findOne({ where: { id: follow.userId } });
+  const follower = await models.User.findOne({
+    where: { id: follow.followerId },
+  });
+  user.followersCount += 1;
+  follower.followingCount += 1;
+  await user.save();
+  await follower.save();
+});
+
+models.Post.beforeCreate(async (post, options) => {
+  const user = await models.User.findOne({ where: { id: post.userId } });
+  user.postCount += 1;
+  await user.save();
+});
 export { sequelize };
 
 export default models;
