@@ -9,6 +9,7 @@ const models = {
   Comment: sequelize.import("./comment"),
   Post: sequelize.import("./post"),
   Like: sequelize.import("./like"),
+  Follow: sequelize.import("./follow"),
   sequelize,
 };
 

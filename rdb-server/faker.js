@@ -10,6 +10,18 @@ const insertFakedata = async () => {
     email: "rishav.21m@gmail.com",
     password,
   });
+  await models.User.create({
+    username: "follower",
+    name: "follower",
+    bio: "follows people",
+    email: "follows@gmail.com",
+    password,
+  });
+  await models.Post.create({
+    title: "jhon wick style",
+    content: "killed 2 men in a bar with a frkin pencil",
+    userId: 1,
+  });
 };
 
 export default insertFakedata;
