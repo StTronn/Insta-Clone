@@ -4,7 +4,7 @@ export const Store = React.createContext();
 
 const initialState = {
   counter: 0,
-  user: false,
+  user: JSON.parse(localStorage.getItem("user")) || false,
   allPostsObj: { posts: [], error: false },
 };
 

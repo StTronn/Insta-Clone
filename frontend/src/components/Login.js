@@ -42,6 +42,7 @@ export const FormWrapper = styled.div`
     cursor: pointer;
   }
 `;
+//`
 
 const Login = (props) => {
   const { from } = props.location.state || { from: { pathname: "/" } };
@@ -71,6 +72,8 @@ const Login = (props) => {
       }
       const data = await response.json();
       console.log(data);
+      localStorage.setItem("token", data.user.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
       dispatch({ type: "SET_USER", payload: data.user });
     } catch (err) {}
   };

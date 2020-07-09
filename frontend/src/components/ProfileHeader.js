@@ -148,7 +148,7 @@ const ProfileHeader = ({ user }) => {
       <div className="profile-info">
         <div className="profile-meta">
           <h2>{user.username}</h2>
-          <Follow />
+          <Follow showUser={user} />
         </div>
 
         <div className="profile-stats">
