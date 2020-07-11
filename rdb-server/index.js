@@ -1,6 +1,7 @@
 import express from "express";
 const app = express();
 const port = 8000;
+const URL = `http://localhost:${port}`;
 import cors from "cors";
 import models, { sequelize } from "./models";
 import auth from "./routes/auth";
@@ -8,11 +9,16 @@ import user from "./routes/user";
 import post from "./routes/post";
 import protect from "./middleware/auth";
 import dotenv from "dotenv";
+import upload from "./upload";
+import path from "path";
 import insertFakedata from "./faker";
 const bodyParser = require("body-parser");
 
 const eraseDatabaseOnSync = true;
 dotenv.config();
+
+//static path
+app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
 
 //middlewares
 app.use(cors());
@@ -24,6 +30,11 @@ app.use((req, res, next) => {
     user: {},
   };
   next();
+});
+
+//testing uploads
+app.post("/upload", upload.single("profilePic"), (req, res) => {
+  res.send("posted");
 });
 
 //routers
