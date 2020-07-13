@@ -14,7 +14,11 @@ router.get("/:username", async (req, res, next) => {
       err.statusCode = 404;
       throw err;
     }
-    res.send(user);
+    const posts = await models.Post.findAll({ where: { userId: user.id } });
+    const retUser = user.toJSON();
+    retUser.posts = posts;
+
+    res.send(retUser);
   } catch (err) {
     console.log(err);
     next(err);

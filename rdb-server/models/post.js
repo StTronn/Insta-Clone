@@ -1,3 +1,4 @@
+import { URL } from "../index";
 const post = (sequelize, DataTypes) => {
   const Post = sequelize.define("post", {
     title: {
@@ -13,6 +14,14 @@ const post = (sequelize, DataTypes) => {
       validate: {
         notEmpty: true,
       },
+    },
+    likesCount: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+    },
+    image: {
+      type: DataTypes.STRING,
+      defaultValue: "http://localhost:8000" + "/uploads/index.png",
     },
   });
 

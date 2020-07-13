@@ -1,7 +1,7 @@
 import express from "express";
 const app = express();
 const port = 8000;
-const URL = `http://localhost:${port}`;
+export const URL = `http://localhost:${port}`;
 import cors from "cors";
 import models, { sequelize } from "./models";
 import auth from "./routes/auth";

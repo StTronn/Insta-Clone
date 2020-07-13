@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { URL } from "../utils";
 import ProfileHeader from "./ProfileHeader";
+import PostPreview from "./PostPreview";
+import { PostIcon, SavedIcon } from "./Icons";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
 
@@ -34,6 +36,7 @@ const getUser = async (username, setUser) => {
   try {
     const response = await fetch(URL + "/user/" + username);
     const user = await response.json();
+    console.log(user);
     user.error = false;
     setUser(user);
   } catch (err) {
@@ -41,10 +44,12 @@ const getUser = async (username, setUser) => {
     setUser({ error: true });
   }
 };
+// `
 
 const Profile = () => {
   const { username } = useParams();
   const [user, setUser] = useState(false);
+  const [tab, setTab] = useState("POSTS");
   useEffect(() => {
     getUser(username, setUser);
   }, [username]);
@@ -53,6 +58,23 @@ const Profile = () => {
       <Wrapper>
         <ProfileHeader user={user} />
         <hr />
+        <div className="profile-tab">
+          <div
+            style={{ fontWeight: tab === "POSTS" ? "500" : "" }}
+            onClick={() => setTab("POSTS")}
+          >
+            <PostIcon />
+            <span>Posts</span>
+          </div>
+          <div
+            style={{ fontWeight: tab === "SAVED" ? "500" : "" }}
+            onClick={() => setTab("SAVED")}
+          >
+            <SavedIcon />
+            <span>Saved</span>
+          </div>
+        </div>
+        <PostPreview posts={user.posts} />
       </Wrapper>
     );
   else

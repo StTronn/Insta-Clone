@@ -36,6 +36,12 @@ models.Post.beforeCreate(async (post, options) => {
   user.postCount += 1;
   await user.save();
 });
+
+models.Like.beforeCreate(async (like, options) => {
+  const post = await models.Post.findOne({ where: { id: like.postId } });
+  post.likesCount += 1;
+  await post.save();
+});
 export { sequelize };
 
 export default models;
