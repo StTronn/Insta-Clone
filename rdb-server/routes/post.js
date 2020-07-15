@@ -67,6 +67,22 @@ router.get("/updatePost", protect, async (req, res, next) => {
   }
 });
 
+router.get("/p/:postId", async (req, res, next) => {
+  try {
+    const postId = parseInt(req.params.postId);
+    const models = req.context.models;
+    const post = await models.Post.findOne({
+      where: { id: postId },
+      include: [{ model: models.Comment }],
+    });
+    console.log(post);
+    res.send(post);
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+});
+
 //delete post of user
 router.get("/delete/:postId", protect, async (req, res, next) => {
   try {
@@ -113,10 +129,11 @@ router.get("/like/:postId", protect, async (req, res, next) => {
 //note outside the server the message is refered to as a comment
 //comment to a given post
 //todo add post in path
-router.post("/comment", protect, async (req, res, next) => {
+router.post("/comment/:postId", protect, async (req, res, next) => {
   try {
     const models = req.context.models;
-    let { text, postId } = req.body;
+    const postId = parseInt(req.params.postId);
+    let { text } = req.body;
     const user = req.context.user;
     const comment = await models.Comment.create({
       text,

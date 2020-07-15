@@ -8,6 +8,8 @@ import Register from "./components/Register";
 import Home from "./components/Home";
 import Nav from "./components/Nav";
 import Profile from "./components/Profile";
+import DetailedPost from "./components/DetailedPost";
+
 import PrivateRoute from "./components/PrivateRouter";
 import "./App.css";
 
@@ -25,6 +27,7 @@ function App() {
             <Route path="/login" component={Login} />
             <Route path="/register" component={Register} />
             <Route path="/user/:username" component={Profile} />
+            <Route path="/p/:postId" component={DetailedPost} />
             <Route exact path="/" component={Home} />
           </Switch>
         </Router>

@@ -98,7 +98,7 @@ const ProfilePreview = ({ posts }) => {
         <div
           key={post._id}
           className="container-overlay"
-          onClick={() => history.push(`/p/${post._id}`)}
+          onClick={() => history.push(`/p/${post.id}`)}
         >
           <img src={post.image} alt="post" />
           <div className="overlay">
