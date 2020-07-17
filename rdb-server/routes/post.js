@@ -73,7 +73,10 @@ router.get("/p/:postId", async (req, res, next) => {
     const models = req.context.models;
     const post = await models.Post.findOne({
       where: { id: postId },
-      include: [{ model: models.Comment }],
+      include: [
+        { model: models.Comment, include: [models.User] },
+        { model: models.User },
+      ],
     });
     console.log(post);
     res.send(post);
@@ -103,7 +106,7 @@ router.get("/delete/:postId", protect, async (req, res, next) => {
   }
 });
 
-router.get("/like/:postId", protect, async (req, res, next) => {
+router.get("/toggleLike/:postId", protect, async (req, res, next) => {
   try {
     const postId = parseInt(req.params.postId);
     const models = req.context.models;
@@ -140,7 +143,9 @@ router.post("/comment/:postId", protect, async (req, res, next) => {
       postId,
       userId: user.id,
     });
-    res.send({ comment, message: "comment added" });
+    let retComment = comment.toJSON();
+    retComment.user = user;
+    res.send({ comment: retComment, message: "comment added" });
   } catch (err) {
     next(err);
   }

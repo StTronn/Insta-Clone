@@ -1,5 +1,6 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
+import defaultAvatar from "../assets/default_avatar.jpg";
 import styled from "styled-components";
 import Avatar from "../styles/Avatar";
 
@@ -20,7 +21,7 @@ const Comment = ({ comment, hideavatar }) => {
         <Avatar
           className="pointer"
           onClick={() => history.push(`/${comment.user.username}`)}
-          src={comment.user.avatar}
+          src={defaultAvatar}
           alt="avatar"
         />
       )}

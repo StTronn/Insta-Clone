@@ -13,11 +13,11 @@ const LikePost = ({ isLiked, postId, incLikes, decLikes }) => {
     if (likedState) {
       setLiked(false);
       decLikes();
-      client(`/posts/${postId}/toggleLike`);
+      client(`/post/toggleLike/${postId}`);
     } else {
       setLiked(true);
       incLikes();
-      client(`/posts/${postId}/toggleLike`);
+      client(`/post/toggleLike/${postId}`);
     }
   };
 

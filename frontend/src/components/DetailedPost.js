@@ -7,6 +7,7 @@ import Comment from "../components/Comment";
 import Placeholder from "../components/Placeholder";
 import Avatar from "../styles/Avatar";
 import Loader from "../components/Loader";
+import defaultAvatar from "../assets/default_avatar.jpg";
 import Modal from "../components/Modal";
 import useInput from "../hooks/useInput";
 import { client } from "../utils";
@@ -14,6 +15,10 @@ import { MoreIcon, CommentIcon, InboxIcon } from "../components/Icons";
 
 const Wrapper = styled.div`
   display: grid;
+  max-width: 930px;
+
+  margin: 0 auto;
+  margin-top: 20px;
   grid-template-columns: 60% 1fr;
 
   .post-info {
@@ -92,6 +97,7 @@ const Wrapper = styled.div`
     }
   }
 `;
+//`
 
 const DetailedPost = () => {
   const history = useHistory();
@@ -106,7 +112,6 @@ const DetailedPost = () => {
   const [loading, setLoading] = useState(true);
   const [deadend, setDeadend] = useState(false);
   const [post, setPost] = useState({});
-
   const [likesState, setLikes] = useState(0);
   const [commentsState, setComments] = useState([]);
 
@@ -120,10 +125,11 @@ const DetailedPost = () => {
     if (e.keyCode === 13) {
       e.preventDefault();
 
-      client(`/posts/${post._id}/comments`, {
+      client(`/post/comment/${post.id}`, {
         body: { text: comment.value },
       }).then((resp) => {
-        setComments([...commentsState, resp.data]);
+        console.log(resp.comment);
+        setComments([...commentsState, resp.comment]);
         scrollToBottom();
       });
 
@@ -135,9 +141,9 @@ const DetailedPost = () => {
     window.scrollTo(0, 0);
     client(`/post/p/${postId}`)
       .then((res) => {
-        setPost(res.data);
-        setComments(res.data.comments);
-        setLikes(res.data.likesCount);
+        setPost(res);
+        setComments(res.comments);
+        setLikes(res.likesCount);
         setLoading(false);
         setDeadend(false);
       })
@@ -148,7 +154,7 @@ const DetailedPost = () => {
     return <Loader />;
   }
 
-  if (!deadend) {
+  if (deadend) {
     return (
       <Placeholder
         title="Sorry, this page isn't available"
@@ -159,11 +165,7 @@ const DetailedPost = () => {
 
   return (
     <Wrapper>
-      <img
-        className="post-img"
-        src={post.files?.length && post.files[0]}
-        alt="post"
-      />
+      <img className="post-img" src={post.image} alt="post" />
 
       <div className="post-info">
         <div className="post-header-wrapper">
@@ -171,7 +173,7 @@ const DetailedPost = () => {
             <Avatar
               onClick={() => history.push(`/${post.user?.username}`)}
               className="pointer avatar"
-              src={post.user?.avatar}
+              src={defaultAvatar}
               alt="avatar"
             />
 
@@ -179,17 +181,15 @@ const DetailedPost = () => {
               className="pointer"
               onClick={() => history.push(`/${post.user?.username}`)}
             >
-              {post.user?.username}
+              {post.user.username}
             </h3>
           </div>
           {post.isMine && <MoreIcon onClick={() => setShowModal(true)} />}
-
-          {showModal && <Modal></Modal>}
         </div>
 
         <div className="comments">
           {commentsState.map((comment) => (
-            <Comment key={comment._id} comment={comment} />
+            <Comment key={comment.id} comment={comment} />
           ))}
           <div ref={commmentsEndRef} />
         </div>
@@ -197,8 +197,8 @@ const DetailedPost = () => {
         <div className="post-actions-stats">
           <div className="post-actions">
             <LikePost
-              isLiked={post?.isLiked}
-              postId={post?._id}
+              isLiked={post.isLiked}
+              postId={post.id}
               incLikes={incLikes}
               decLikes={decLikes}
             />

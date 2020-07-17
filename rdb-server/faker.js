@@ -8,6 +8,8 @@ const insertFakedata = async () => {
     name: "rishav thakur",
     bio: "software dev reads and make stuff",
     email: "rishav.21m@gmail.com",
+    token:
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNTk0NDk2MjQyfQ.UWSmq76P-0UWi-d_ay-xAlGVETMej9pIq1Ub_3aGTKY",
     password,
   });
   await models.User.create({
